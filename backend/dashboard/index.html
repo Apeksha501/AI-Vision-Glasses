@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Vision Glasses</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+            background: #f1f5f9;
+            color: #0f172a;
+        }
+
+        header {
+            background: #111827;
+            color: white;
+            padding: 28px 40px;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        header p {
+            margin: 7px 0 0;
+            color: #cbd5e1;
+        }
+
+        .container {
+            max-width: 1150px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.07);
+            margin-bottom: 20px;
+        }
+
+        .card h2 {
+            margin-top: 0;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 7px;
+            font-weight: 600;
+        }
+
+        input[type="file"],
+        input[type="number"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 9px;
+            font-size: 15px;
+        }
+
+        button {
+            margin-top: 18px;
+            padding: 13px 20px;
+            border: none;
+            border-radius: 9px;
+            background: #2563eb;
+            color: white;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #1d4ed8;
+        }
+
+        button.secondary {
+            background: #475569;
+        }
+
+        .status {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 9px;
+            background: #f8fafc;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .stat {
+            background: #f8fafc;
+            padding: 18px;
+            border-radius: 12px;
+        }
+
+        .stat-title {
+            color: #64748b;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .stat-value {
+            font-size: 25px;
+            font-weight: 700;
+            margin-top: 7px;
+        }
+
+        .risk {
+            text-align: center;
+            padding: 25px;
+            border-radius: 14px;
+            margin-top: 15px;
+            background: #f1f5f9;
+        }
+
+        .risk-value {
+            font-size: 42px;
+            font-weight: 800;
+        }
+
+        .high {
+            color: #dc2626;
+        }
+
+        .medium {
+            color: #d97706;
+        }
+
+        .low {
+            color: #16a34a;
+        }
+
+        .object {
+            display: flex;
+            justify-content: space-between;
+            padding: 13px;
+            margin: 8px 0;
+            background: #f8fafc;
+            border-radius: 9px;
+        }
+
+        .message {
+            margin-top: 18px;
+            padding: 17px;
+            background: #fff7ed;
+            border-radius: 10px;
+            font-size: 17px;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .success {
+            color: #15803d;
+            font-weight: 600;
+        }
+
+        .error {
+            color: #dc2626;
+            font-weight: 600;
+        }
+
+        footer {
+            text-align: center;
+            color: #64748b;
+            padding: 20px;
+        }
+
+        @media (max-width: 750px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+
+            header {
+                padding: 22px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>AI Vision Glasses</h1>
+        <p>AI and IoT Enabled Smart Vision Assistance System</p>
+    </header>
+
+    <div class="container">
+
+        <!-- CONTROL PANEL -->
+        <div class="card">
+
+            <h2>🔬 Live AI Test</h2>
+
+            <p>
+                Upload an image and provide the simulated ultrasonic
+                sensor distance to test the complete AI + IoT pipeline.
+            </p>
+
+            <label for="image">
+                Camera Image
+            </label>
+
+            <input type="file" id="image" accept="image/*">
+
+            <label for="distance">
+                Ultrasonic Distance (cm)
+            </label>
+
+            <input type="number" id="distance" value="35" min="1" max="500">
+
+            <button onclick="runDetection()">
+                🚀 Run AI Detection
+            </button>
+
+            <button class="secondary" onclick="speakAlert()">
+                🔊 Speak Alert
+            </button>
+
+            <div id="status" class="status">
+                Ready for image analysis.
+            </div>
+
+        </div>
+
+
+        <!-- SYSTEM STATUS -->
+
+        <div class="card">
+
+            <h2>System Status</h2>
+
+            <div class="stats">
+
+                <div class="stat">
+                    <div class="stat-title">AI MODEL</div>
+                    <div class="stat-value">YOLO11n</div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-title">SENSOR</div>
+                    <div class="stat-value" id="sensorValue">
+                        35 cm
+                    </div>
+                </div>
+
+                <div class="stat">
+                    <div class="stat-title">OBJECTS</div>
+                    <div class="stat-value" id="objectCount">
+                        0
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="risk">
+
+                <div>Current Risk Level</div>
+
+                <div id="riskValue" class="risk-value low">
+                    LOW
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- DETECTION RESULTS -->
+
+        <div class="card">
+
+            <h2>🚧 Detection Results</h2>
+
+            <div id="detections">
+                No detection performed yet.
+            </div>
+
+        </div>
+
+
+        <!-- ASSISTIVE FEEDBACK -->
+
+        <div class="card">
+
+            <h2>🔊 Assistive Feedback</h2>
+
+            <div id="voiceMessage" class="message">
+                System ready.
+            </div>
+
+        </div>
+
+
+        <!-- MEDICINE MODULE -->
+
+        <div class="card">
+
+            <h2>💊 Medicine Recognition</h2>
+
+            <div class="object">
+                <span>Recognition Module</span>
+                <strong class="success">CONNECTED</strong>
+            </div>
+
+            <div class="object">
+                <span>Current Mode</span>
+                <strong>Prototype</strong>
+            </div>
+
+            <div class="message">
+                Medicine recognition API is connected.
+                Real model training and validation are planned
+                as the next development stage.
+            </div>
+
+        </div>
+
+        <!-- RECENT DETECTION HISTORY -->
+
+        <div class="card">
+
+            <h2>📋 Recent Detection History</h2>
+
+            <button onclick="loadHistory()">
+                🔄 Refresh History
+            </button>
+
+            <div id="history">
+                Loading detection history...
+            </div>
+
+        </div>
+
+    </div>
+
+    <footer>
+        AI + Computer Vision + IoT Software Prototype
+    </footer>
+
+    <script>
+
+        let latestVoiceMessage = "System ready.";
+
+
+        async function loadHistory() {
+
+            const historyContainer =
+                document.getElementById("history");
+
+            try {
+
+                const response =
+                    await fetch("/api/ai/history");
+
+                const data =
+                    await response.json();
+
+                if (!data.history || data.history.length === 0) {
+
+                    historyContainer.innerHTML =
+                        "<p>No detection history available.</p>";
+
+                    return;
+                }
+
+                historyContainer.innerHTML =
+                    data.history
+                        .slice()
+                        .reverse()
+                        .map(event => {
+
+                            const objects =
+                                event.detections && event.detections.length > 0
+                                    ? event.detections
+                                        .map(d => d.object ? (d.object.charAt(0).toUpperCase() + d.object.slice(1)) : "")
+                                        .join(", ")
+                                    : "No objects";
+
+                            const riskClass =
+                                event.risk_level ? event.risk_level.toLowerCase() : "low";
+
+                            return `
+                    <div class="object">
+                        <span>
+                            <strong>${objects}</strong>
+                            <br>
+                            ${event.distance_cm} cm
+                            <br>
+                            ${event.timestamp}
+                        </span>
+
+                        <strong class="${riskClass}">
+                            ${event.risk_level}
+                        </strong>
+                    </div>
+                    `;
+
+                        })
+                        .join("");
+
+            } catch (error) {
+
+                historyContainer.innerHTML =
+                    "<p class='error'>Unable to load history.</p>";
+
+            }
+        }
+
+
+        async function runDetection() {
+
+            const imageInput = document.getElementById("image");
+            const distanceInput = document.getElementById("distance");
+            const status = document.getElementById("status");
+
+            if (!imageInput.files.length) {
+
+                status.innerHTML =
+                    '<span class="error">Please choose an image first.</span>';
+
+                return;
+            }
+
+            const file = imageInput.files[0];
+            const distance = Number(distanceInput.value);
+
+            const formData = new FormData();
+
+            formData.append("file", file);
+
+            status.innerHTML = "⏳ Running YOLO11n detection...";
+
+            try {
+
+                const response = await fetch(
+                    `/api/ai/assist?distance_cm=${distance}`,
+                    {
+                        method: "POST",
+                        body: formData
+                    }
+                );
+
+                const data = await response.json();
+
+                if (!response.ok) {
+
+                    throw new Error(
+                        data.detail || "Detection failed."
+                    );
+                }
+
+                updateDashboard(data);
+                loadHistory();
+
+                status.innerHTML =
+                    '<span class="success">✓ AI detection completed successfully.</span>';
+
+            } catch (error) {
+
+                status.innerHTML =
+                    '<span class="error">Error: ' +
+                    error.message +
+                    '</span>';
+
+            }
+
+        }
+
+
+        function updateDashboard(data) {
+
+            const risk =
+                data.risk_assessment.risk_level;
+
+            const distance =
+                data.sensor.distance_cm;
+
+            const detections =
+                data.detections;
+
+            document.getElementById("sensorValue").innerText =
+                distance + " cm";
+
+            document.getElementById("objectCount").innerText =
+                detections.length;
+
+            const riskElement =
+                document.getElementById("riskValue");
+
+            riskElement.innerText = risk;
+
+            riskElement.className =
+                "risk-value " + risk.toLowerCase();
+
+
+            const detectionContainer =
+                document.getElementById("detections");
+
+            if (detections.length === 0) {
+
+                detectionContainer.innerHTML =
+                    "No objects detected.";
+
+            } else {
+
+                detectionContainer.innerHTML =
+                    detections.map(item => {
+
+                        const confidence =
+                            (item.confidence * 100).toFixed(1);
+
+                        return `
+                    <div class="object">
+                        <span>🔹 ${item.object}</span>
+                        <strong>${confidence}%</strong>
+                    </div>
+                `;
+
+                    }).join("");
+
+            }
+
+
+            latestVoiceMessage =
+                data.risk_assessment.voice_message;
+
+            document.getElementById("voiceMessage").innerHTML =
+                "🔊 <strong>" +
+                latestVoiceMessage +
+                "</strong>";
+
+        }
+
+
+        function speakAlert() {
+
+            if (!("speechSynthesis" in window)) {
+
+                alert(
+                    "Text-to-speech is not supported by this browser."
+                );
+
+                return;
+            }
+
+            const speech =
+                new SpeechSynthesisUtterance(
+                    latestVoiceMessage
+                );
+
+            speech.rate = 0.9;
+            speech.pitch = 1;
+
+            window.speechSynthesis.cancel();
+
+            window.speechSynthesis.speak(speech);
+        }
+        loadHistory();
+
+    </script>
+
+</body>
+
+</html>

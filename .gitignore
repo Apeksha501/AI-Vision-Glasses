@@ -1,0 +1,65 @@
+# =========================
+# Python
+# =========================
+.venv/
+__pycache__/
+*.py[cod]
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# =========================
+# Environment / Secrets
+# =========================
+.env
+.env.*
+!.env.example
+
+# =========================
+# macOS
+# =========================
+.DS_Store
+
+# =========================
+# Flutter / Dart
+# =========================
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+.pub-cache/
+*.iml
+
+# =========================
+# IDE
+# =========================
+.idea/
+.vscode/
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# Temporary files
+# =========================
+*.tmp
+*.temp
+# Temporary local JSON database
+backend/data.json
+
+# Model weights / binaries
+*.pt
+*.onnx
+yolo11n.pt
+
+# Uploads
+backend/uploads/
+uploads/
+
+# Additional virtual environment locations
+backend/.venv/
+**/.venv/
