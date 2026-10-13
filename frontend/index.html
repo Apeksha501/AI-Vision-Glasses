@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Vision Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="dashboard">
+        <header>
+            <h1>SMART VISION</h1>
+            <div class="status-indicator">
+                <span id="connection-status" class="status-dot disconnected"></span>
+                <span id="status-text">Disconnected</span>
+            </div>
+        </header>
+
+        <section class="camera-section">
+            <h2>LIVE CAMERA</h2>
+            <div class="camera-container" id="camera-container">
+                <!-- Using a placeholder endpoint for the mock. In reality, this will be an MJPEG stream -->
+                <img id="camera-feed" src="/api/stream" alt="Camera Feed">
+                <!-- Bounding boxes will be injected here dynamically -->
+                <div id="bbox-overlay" class="bbox-overlay"></div>
+            </div>
+        </section>
+
+        <section class="info-section">
+            <div class="alert-box" id="alert-box">
+                <p id="alert-message">Waiting for data...</p>
+            </div>
+
+            <div class="stats-grid" id="stats-grid">
+                <!-- Data will be populated here by app.js -->
+                <div class="stat-item"><span>Object:</span> <strong id="val-object">--</strong></div>
+                <div class="stat-item"><span>Confidence:</span> <strong id="val-confidence">--</strong></div>
+                <div class="stat-item"><span>Position:</span> <strong id="val-position">--</strong></div>
+                <div class="stat-item"><span>Angle:</span> <strong id="val-angle">--</strong></div>
+                <div class="stat-item"><span>Distance:</span> <strong id="val-distance">--</strong></div>
+                <div class="stat-item"><span>Size:</span> <strong id="val-size">--</strong></div>
+                <div class="stat-item"><span>Priority:</span> <strong id="val-priority">--</strong></div>
+            </div>
+        </section>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
